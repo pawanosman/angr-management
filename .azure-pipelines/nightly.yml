@@ -8,6 +8,10 @@ schedules:
     include:
     - master
 
+variables:
+- name: dry_run
+  value: false
+
 stages:
 - stage: Build
   jobs:
@@ -37,7 +41,7 @@ stages:
 
 - stage: Deploy
   dependsOn: Build
-  condition: succeeded()
+  condition: and(succeeded(), ne(variables['dry_run'], 'true'))
   jobs:
   - job: Release
     pool:
